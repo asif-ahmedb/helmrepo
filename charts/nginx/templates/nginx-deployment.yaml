@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.nginx.name }}
+  name: {{ .Values.nginx.name }}
+spec:
+  replicas: {{ .Values.nginx.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.nginx.name }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nginx.name }}
+    spec:
+      containers:
+        - name: {{ .Values.nginx.name }}
+          image: {{ .Values.nginx.container.image }}:{{ .Values.nginx.container.tag }}
+          ports:
+            - containerPort: {{ .Values.nginx.container.containerPort }}
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}

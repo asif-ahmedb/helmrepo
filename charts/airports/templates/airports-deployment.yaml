@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.airports.app.name}}
+  labels:
+    app: {{ .Values.airports.app.name}}
+
+spec:
+  replicas: {{ .Values.airports.app.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.airports.app.name}}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.airports.app.name}}
+    spec:
+      containers:
+      - name: {{ .Values.airports.app.container.name}}
+        image: {{ .Values.airports.app.container.image }}:{{ .Values.airports.app.container.tag }}
+        ports:
+          - containerPort: {{ .Values.airports.app.container.containerPort }}
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.airports.app.container.livenessProbe.path }}
+            port: {{ .Values.airports.app.container.livenessProbe.port }}
+          failureThreshold: {{ .Values.airports.app.container.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.airports.app.container.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.airports.app.container.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.airports.app.container.livenessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.airports.app.container.livenessProbe.timeoutSeconds }} 
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.airports.app.container.readinessProbe.path }}
+            port: {{ .Values.airports.app.container.readinessProbe.port }}
+          failureThreshold: {{ .Values.airports.app.container.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.airports.app.container.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.airports.app.container.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.airports.app.container.readinessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.airports.app.container.readinessProbe.timeoutSeconds }}
+        resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.countries.app.name }}
+  labels:
+    app: {{ .Values.countries.app.name }}
+spec:
+  replicas: {{ .Values.countries.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.countries.app.name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.countries.app.name }}
+    spec:
+      containers:
+      - name: {{ .Values.countries.app.container.name }}
+        image: {{ .Values.countries.app.container.image }}:{{ .Values.countries.app.container.tag }}
+        ports:
+          - containerPort: {{ .Values.countries.app.container.containerPort }}
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.countries.app.container.livenessProbe.path }}
+            port: {{ .Values.countries.app.container.livenessProbe.port }}
+          failureThreshold: {{ .Values.countries.app.container.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.countries.app.container.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.countries.app.container.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.countries.app.container.livenessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.countries.app.container.livenessProbe.timeoutSeconds }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.countries.app.container.readinessProbe.path }}
+            port: {{ .Values.countries.app.container.readinessProbe.port }}
+          failureThreshold: {{ .Values.countries.app.container.readinessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.countries.app.container.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.countries.app.container.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.countries.app.container.readinessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.countries.app.container.readinessProbe.timeoutSeconds }}
+        resources: {}
+      restartPolicy: Always
+status: {}

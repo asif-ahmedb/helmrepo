@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.countries.service.name }}
+spec:
+  ports:
+    - port: {{ .Values.countries.service.port }}
+      targetPort: {{ .Values.countries.service.targetPort }}
+  selector:
+    app: {{ .Values.countries.app.name }}
+status:
+  loadBalancer: {}

@@ -1,0 +1,18 @@
+apiVersion: v2
+name: myapp
+description: A Helm chart for mysinglechart which contains airports, countries, nginx.
+version: 1.0.1
+appVersion: 1.0.1
+dependencies:
+  - name: airports
+    version: "1.0.1"
+    repository: "file://./charts/airports"
+    enabled: true
+  - name: countries
+    version: "1.0.1"
+    repository: "file://./charts/countries"
+    enabled: true
+  - name: nginx
+    version: "1.0.1"
+    repository: "file://./charts/nginx"
+    enabled: true

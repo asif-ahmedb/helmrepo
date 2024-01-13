@@ -1,0 +1,12 @@
+nginx:
+  name: nginx-depl
+  replicaCount: 1
+  container:
+    image: barbhua786/nginx
+    tag: 1.0.1
+    containerPort: 8000
+  service:
+    name: nginx-svc
+    port: 8000
+    targetPort: 8000
+    type: ClusterIP

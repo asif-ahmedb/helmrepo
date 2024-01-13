@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.airports.service.name }}
+spec:
+  ports:
+    - port: {{ .Values.airports.service.port }}
+      targetPort: {{ .Values.airports.service.targetPort }}
+  selector:
+    app: {{ .Values.airports.app.name }}
+status:
+  loadBalancer: {}

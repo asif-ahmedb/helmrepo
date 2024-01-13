@@ -1,0 +1,42 @@
+name: Deploy to k8s
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-to-k8s:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2 
+    - name: Get short SHA
+      id: slug
+      run: echo "::set-output name=sha8::$(echo ${GITHUB_SHA} | cut -c1-8)"
+        
+    - name: AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region:  ${{ secrets.AWS_REGION }}    
+
+    - name: kubeconfig 
+      run: |
+          aws eks update-kubeconfig --name ${{ env.K8S_CLUSTER }} --region ${{ env.AWS_REGION }}  --kubeconfig ./kubeconfig
+          echo 'KUBE_CONFIG_DATA<<EOF' >> $GITHUB_ENV
+          echo $(cat ./kubeconfig | base64) >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV   
+          
+    - name: helm deploy
+      uses: koslib/helm-eks-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
+      with:
+        command: |
+              helm version
+              kubectl version
+              kubectl cluster-info 
+              helm upgrade k8s-cicd-deploy --install --wait . --set nginx.nginx.service.type=LoadBalancer -n default
+

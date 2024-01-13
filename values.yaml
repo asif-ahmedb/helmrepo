@@ -1,0 +1,73 @@
+airports:
+  app:
+    name: airports-assembly
+    replicaCount: 1
+    container:
+      name: airports-assembly
+      image: barbhua786/airports-assembly
+      tag: 1.0.1
+      containerPort: 8080
+      livenessProbe:
+        path: /health/live
+        port: 8080
+        failureThreshold: 3
+        initialDelaySeconds: 10
+        periodSeconds: 15
+        successThreshold: 1
+        timeoutSeconds: 5
+      readinessProbe:
+        path: /health/ready
+        port: 8080
+        failureThreshold: 3
+        initialDelaySeconds: 10
+        periodSeconds: 15
+        successThreshold: 1
+        timeoutSeconds: 5
+  service:
+    name: airports-svc
+    port: 8080
+    targetPort: 8080
+
+countries:
+  app:
+    name: countries-assembly
+    replicaCount: 1
+    container:
+      name: countries-assembly
+      image: barbhua786/countries-assembly
+      tag: 1.0.1
+      containerPort: 8080
+      livenessProbe:
+        path: /health/live
+        port: 8080
+        failureThreshold: 3
+        initialDelaySeconds: 10
+        periodSeconds: 15
+        successThreshold: 1
+        timeoutSeconds: 5
+      readinessProbe:
+        path: /health/ready
+        port: 8080
+        failureThreshold: 3
+        initialDelaySeconds: 10
+        periodSeconds: 15
+        successThreshold: 1
+        timeoutSeconds: 5
+  service:
+    name: countries-svc
+    port: 8080
+    targetPort: 8080
+
+nginx:
+  name: nginx-depl
+  replicaCount: 1
+  container:
+    image: barbhua786/nginx
+    tag: 1.0.1
+    containerPort: 8000
+    hostPort: 8000
+  service:
+    name: nginx-svc
+    port: 8000
+    targetPort: 8000
+    type: ClusterIP
