@@ -24,7 +24,7 @@ jobs:
 
     - name: kubeconfig 
       run: |
-          aws eks update-kubeconfig --name ${{ env.K8S_CLUSTER }} --region ${{ env.AWS_REGION }}  --kubeconfig ./kubeconfig
+          aws eks update-kubeconfig --name ${{ secrets.K8S_CLUSTER }} --region ${{ secrets.AWS_REGION }}  --kubeconfig ./kubeconfig
           echo 'KUBE_CONFIG_DATA<<EOF' >> $GITHUB_ENV
           echo $(cat ./kubeconfig | base64) >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV   
