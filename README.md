@@ -46,6 +46,21 @@ The project contains the configuration files for two micro-services namely airpo
   helm upgrade --install <RELEASE_NAME> . -n <NAMESPACE>
 ```
 - Use kubectl commands to check if the services are up and running.[NOTE: On minikube, the services might take a little time to come up; specifically, the airports and countries deployments.]
+  
+***Note: If deployed on minikube, please use port-forwarding to access the application on local machine by forwarding traffic from that port on the local machine to the assigned port on the minikube Service.***
+```
+kubectl port-forward service/nginx-svc 8000:8000 
+```
+
+Output:
+
+```
+Forwarding from 127.0.0.1:8000 -> 8000
+Forwarding from [::1]:8000 -> 8000
+```
+This forwards traffic from port 8000 on your local machine to port 8000 on the nginx-svc minikube service.
+Now when you visit ***localhost:8000/endpoint*** on your local machine, you should see the desired result.
+  
 - To check the version update features, modify the necessary values.yaml to update the version[docker image tag - from 1.0.1 to 1.1.0] and use helm to do an upgrade install. For now, this is for airports deployment **only**.
 
 **On GitHub via GitHub Actions**
