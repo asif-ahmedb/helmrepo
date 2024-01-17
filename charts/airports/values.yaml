@@ -5,7 +5,7 @@ airports:
     container:
       name: airports-assembly
       image: barbhua786/airports-assembly
-      tag: 1.0.1
+      tag: 1.1.0
       containerPort: 8080
       livenessProbe:
         path: /health/live
